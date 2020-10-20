@@ -3,14 +3,74 @@ import 'package:weather_application/components/icon_content.dart';
 import 'package:weather_application/constants.dart';
 import 'package:weather_application/components/dotted_line.dart';
 import 'package:weather_icons/weather_icons.dart';
+import 'package:weather_application/services/weather.dart';
 
 class LocationScreen extends StatefulWidget {
+
+  LocationScreen({this.locationWeather});
+  final locationWeather;
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+
+  String location;
+  String description; //описание погоды //
+  int temperature; //temp; //температура//
+  int propability;  //pop; //вероятность осадков
+  double quantity; //rain; //кол-во осадков     -------------
+  int pressurer; //давление
+  int windSpeed; //скорость ветра
+  String windDeg;
+  IconData mainIcon;
+
+
+  WeatherModel weather = WeatherModel();
+  String message;
+
+  void updateUI(dynamic wetherData) {
+    setState(() {
+      print(wetherData);
+      String loc = wetherData['timezone'];
+      location = weather.getCurrentLocation(loc);
+      print('location $location');
+      //
+      temperature  = wetherData['current']['temp'];
+      print("temperature: $temperature ");
+      //
+      description = wetherData['current']['weather'][0]['main'];
+      print('description $description');
+      //
+      propability = wetherData['hourly'][0]['pop'];
+      print ('propability $propability');
+      //
+      quantity = wetherData['daily'][0]['rain'];
+      print('Вероятность $quantity');
+      //
+      pressurer = wetherData['current']['pressure'];
+      print(pressurer);
+      //
+      int wind = wetherData['current']['wind_speed'];
+      windSpeed = weather.editedWindSpeed(wind);
+      print(windSpeed);
+      //
+      int windDirection = wetherData['current']['wind_deg'];
+      windDeg = weather.getWindDirection(windDirection);
+      print(windDeg);
+
+      mainIcon = weather.getTitleLogo(description);
+
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+
+    updateUI(widget.locationWeather);
+  }
 
 
   int _currentIndex = 0;
@@ -30,7 +90,7 @@ class _LocationScreenState extends State<LocationScreen> {
               ),
 
               BoxedIcon(
-                WeatherIcons.day_sunny,
+                mainIcon,
                 color: Colors.amber,
                 size: MediaQuery.of(context).size.width/3,
               ),
@@ -42,7 +102,7 @@ class _LocationScreenState extends State<LocationScreen> {
               //   ),
               // ),
 
-              Text('London, UK',
+              Text('$location',
                 style: kLocationText,
               ),
 
@@ -50,7 +110,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 height: 5.0,
               ),
 
-              Text('22°C | Sunny',
+              Text('$temperature°C | $description',
                 style: kWeatherStatus,
               ),
 
@@ -59,9 +119,9 @@ class _LocationScreenState extends State<LocationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  IconContent(WeatherIcons.rain_wind,'57%'),
-                  IconContent(WeatherIcons.raindrop, '1.0 mm'),
-                  IconContent(WeatherIcons.celsius, '1019 hPa'),
+                  IconContent(WeatherIcons.rain_wind,'$propability%'),
+                  IconContent(WeatherIcons.raindrop, '$quantity mm'),
+                  IconContent(WeatherIcons.celsius, '$pressurer hPa'),
                 ],
               ),
 
@@ -72,8 +132,8 @@ class _LocationScreenState extends State<LocationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  IconContent(WeatherIcons.strong_wind, '20 km/h'),
-                  IconContent(WeatherIcons.wind_direction,'SE'),
+                  IconContent(WeatherIcons.strong_wind, '$windSpeed km/h'),
+                  IconContent(WeatherIcons.wind_direction,'$windDeg'),
                 ],
               ),
 
