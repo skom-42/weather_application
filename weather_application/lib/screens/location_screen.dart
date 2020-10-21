@@ -1,155 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:weather_application/components/icon_content.dart';
-import 'package:weather_application/constants.dart';
-import 'package:weather_application/components/dotted_line.dart';
-import 'package:weather_icons/weather_icons.dart';
-import 'package:weather_application/services/weather.dart';
+import 'package:weather_application/bloc/location_bloc.dart';
+import 'package:weather_application/bloc/location_events.dart';
+import 'package:weather_application/bloc/location_states.dart';
+import 'package:weather_application/models/current_weather_model.dart';
+import 'package:weather_application/repository/weather_repository.dart';
+import 'package:weather_application/widgets/weather_load_success.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+
 
 class LocationScreen extends StatefulWidget {
 
-  LocationScreen({this.locationWeather});
-  final locationWeather;
+  LocationScreen({this.repo});
+  WeatherRepository repo;
 
   @override
-  _LocationScreenState createState() => _LocationScreenState();
+  _LocationScreenState createState() => _LocationScreenState(repo: repo);
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-
-  String location;
-  String description; //описание погоды //
-  int temperature; //temp; //температура//
-  int propability;  //pop; //вероятность осадков
-  double quantity; //rain; //кол-во осадков     -------------
-  int pressurer; //давление
-  int windSpeed; //скорость ветра
-  String windDeg;
-  IconData mainIcon;
-
-
-  WeatherModel weather = WeatherModel();
-  String message;
-
-  void updateUI(dynamic wetherData) {
-    setState(() {
-      print(wetherData);
-      String loc = wetherData['timezone'];
-      location = weather.getCurrentLocation(loc);
-      print('location $location');
-      //
-      temperature  = wetherData['current']['temp'];
-      print("temperature: $temperature ");
-      //
-      description = wetherData['current']['weather'][0]['main'];
-      print('description $description');
-      //
-      propability = wetherData['hourly'][0]['pop'];
-      print ('propability $propability');
-      //
-      quantity = wetherData['daily'][0]['rain'];
-      print('Вероятность $quantity');
-      //
-      pressurer = wetherData['current']['pressure'];
-      print(pressurer);
-      //
-      int wind = wetherData['current']['wind_speed'];
-      windSpeed = weather.editedWindSpeed(wind);
-      print(windSpeed);
-      //
-      int windDirection = wetherData['current']['wind_deg'];
-      windDeg = weather.getWindDirection(windDirection);
-      print(windDeg);
-
-      mainIcon = weather.getTitleLogo(description);
-
-    });
-  }
-
-  @override
-  void initState(){
-    super.initState();
-
-    updateUI(widget.locationWeather);
-  }
+  WeatherRepository repo;
+  CurrentWeatherModel model;
+  _LocationScreenState({this.repo});
 
 
   int _currentIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<WeatherBloc>(context).add(WeatherRequested());
+  }
+
+  getLocationData() async {
+    model = await repo.getLocationWeather();
+    print(model.windDeg);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Text('Today',
-                style: kLageTex,
-              ),
-              Divider(
-                thickness: 2.0,
-              ),
-
-              BoxedIcon(
-                mainIcon,
-                color: Colors.amber,
-                size: MediaQuery.of(context).size.width/3,
-              ),
-              // Container(
-              //   margin: EdgeInsets.only(top: 20, bottom: 40),
-              //   child: Icon(WeatherIcons.day_sunny,
-              //   size: MediaQuery.of(context).size.width/3,
-              //   color: Colors.amber,
-              //   ),
-              // ),
-
-              Text('$location',
-                style: kLocationText,
-              ),
-
-              SizedBox(
-                height: 5.0,
-              ),
-
-              Text('$temperature°C | $description',
-                style: kWeatherStatus,
-              ),
-
-              DottedLine(),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  IconContent(WeatherIcons.rain_wind,'$propability%'),
-                  IconContent(WeatherIcons.raindrop, '$quantity mm'),
-                  IconContent(WeatherIcons.celsius, '$pressurer hPa'),
-                ],
-              ),
-
-              SizedBox(
-                height: 20.0,
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  IconContent(WeatherIcons.strong_wind, '$windSpeed km/h'),
-                  IconContent(WeatherIcons.wind_direction,'$windDeg'),
-                ],
-              ),
-
-              DottedLine(),
-
-              FlatButton(
-                onPressed: (){
-                },
-                child:
-                Text('Share', style: TextStyle(
-                  color: Colors.deepOrangeAccent,
-                  fontSize: 20.0,
-                ),),
-              ),
-            ],
-          ),
+      body: Center(
+        child: BlocBuilder<WeatherBloc,WeatherState>(
+            builder: weatherBlocBuilder
         ),
       ),
 
@@ -173,5 +66,20 @@ class _LocationScreenState extends State<LocationScreen> {
         },
       ),
     );
+  }
+
+  Widget weatherBlocBuilder(context,state) {
+    if(state is WeatherLoading){
+      return Center(child: CircularProgressIndicator());
+    }
+    if(state is WeatherLoadSuccess){
+      model = state.model;
+      return weatherLoadSuccess(model: model);
+    }
+    else {
+      //TODO if SP empty return textError
+      //TODO when data loaded from SP return weatherLoadSuccess + Toast(no connection)
+      return Text("Error");
+    }
   }
 }
