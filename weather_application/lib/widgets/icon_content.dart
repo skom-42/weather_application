@@ -19,6 +19,7 @@ class IconContent extends StatelessWidget {
           child: BoxedIcon(
             icon,
             color: Colors.amber,
+            size: 30,
 
           ),
         ),

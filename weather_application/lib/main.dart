@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_application/repository/CurrentWeatherApiClient.dart';
+import 'package:weather_application/repository/current_weather_apiClient.dart';
 import 'package:weather_application/repository/weather_repository.dart';
 import 'package:weather_application/bloc/location_bloc.dart';
 import 'screens/location_screen.dart';

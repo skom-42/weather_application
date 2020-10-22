@@ -10,6 +10,7 @@ class CurrentWeatherModel{
   final pressurer; //давление
   final windSpeed; //скорость ветра
   final windDeg;
+  final date;
 
 
   CurrentWeatherModel(
@@ -20,10 +21,14 @@ class CurrentWeatherModel{
       this.quantity,
       this.pressurer,
       this.windSpeed,
-      this.windDeg
+      this.windDeg,
+      this.date
       );
 
   factory CurrentWeatherModel.fromJson(Map<String, dynamic> json){
+    DateTime now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day);
+
     //print(json['current']['weather'][0]['main']);
     return CurrentWeatherModel(
         json["timezone"],
@@ -33,7 +38,8 @@ class CurrentWeatherModel{
         json['daily'][0]['rain'],
         json['current']['pressure'],
         json['current']['wind_speed'],
-        json['current']['wind_deg']
+        json['current']['wind_deg'],
+        date
     );
   }
 
@@ -44,7 +50,7 @@ class CurrentWeatherModel{
   }
 
   int editedWindSpeed(int speed){
-    return (speed / 3).toInt();
+    return (speed / 3.6).toInt();
   }
 
   static String getWindDirection(int degrees){

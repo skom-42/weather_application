@@ -40,9 +40,12 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: BlocBuilder<WeatherBloc,WeatherState>(
-            builder: weatherBlocBuilder
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Center(
+          child: BlocBuilder<WeatherBloc,WeatherState>(
+              builder: weatherBlocBuilder
+          ),
         ),
       ),
 
@@ -77,8 +80,6 @@ class _LocationScreenState extends State<LocationScreen> {
       return weatherLoadSuccess(model: model);
     }
     else {
-      //TODO if SP empty return textError
-      //TODO when data loaded from SP return weatherLoadSuccess + Toast(no connection)
       return Text("Error");
     }
   }

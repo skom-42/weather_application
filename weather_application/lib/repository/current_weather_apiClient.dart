@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_application/services/location.dart';
 import 'dart:convert';
-
 import 'package:weather_application/models/current_weather_model.dart';
-import 'package:weather_application/services/networking.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 const apiKey = '7cbee4239353067306bb4f466f0bee43';
 const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/onecall';
-
 
 class CurrentWeatherApiClient{
 
@@ -32,4 +31,4 @@ class CurrentWeatherApiClient{
     final jsonDecoded = json.decode(response);
     return CurrentWeatherModel.fromJson(jsonDecoded);
   }
-}
+  }

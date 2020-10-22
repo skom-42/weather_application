@@ -16,11 +16,14 @@ class weatherLoadSuccess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day);
+
     return Container(
       child:  SafeArea(
         child: Column(
           children: <Widget>[
-            Text('Today', //TODO change if offline
+            Text(getDateTime(DateTime.parse(model.date.toString())) == date ? 'Today' : model.date.toString(),
               style: kLageTex,
             ),
             Divider(
@@ -28,7 +31,7 @@ class weatherLoadSuccess extends StatelessWidget {
             ),
 
             BoxedIcon(
-              CurrentWeatherModel.getTitleLogo(model.description),
+              WeatherIcons.day_sunny,
               color: Colors.amber,
               size: MediaQuery.of(context).size.width/3,
             ),
@@ -91,3 +94,8 @@ class weatherLoadSuccess extends StatelessWidget {
       ),
     );
   }}
+
+
+  DateTime getDateTime (DateTime dateTime){
+  return DateTime(dateTime.year,dateTime.month,dateTime.day);
+  }
