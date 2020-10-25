@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weather_application/bloc/location_bloc.dart';
-import 'package:weather_application/bloc/location_events.dart';
-import 'package:weather_application/bloc/location_states.dart';
-import 'package:weather_application/models/current_weather_model.dart';
+import 'package:weather_application/bloc/weather_bloc.dart';
+import 'package:weather_application/bloc/weather_event.dart';
+import 'package:weather_application/bloc/weather_state.dart';
+import 'package:weather_application/models/weather_model.dart';
 import 'package:weather_application/repository/weather_repository.dart';
 import 'package:weather_application/widgets/weather_load_success.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +20,7 @@ class LocationScreen extends StatefulWidget {
 
 class _LocationScreenState extends State<LocationScreen> {
   WeatherRepository repo;
-  CurrentWeatherModel model;
+  Weather model;
   _LocationScreenState({this.repo});
 
 
@@ -29,12 +29,12 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<WeatherBloc>(context).add(WeatherRequested());
+    BlocProvider.of<WeatherBloc>(context).add(FetchWeather());
   }
 
   getLocationData() async {
-    model = await repo.getLocationWeather();
-    print(model.windDeg);
+    model = await repo.getWeather();
+    print(model.windSpeed);
   }
 
   @override
@@ -73,10 +73,12 @@ class _LocationScreenState extends State<LocationScreen> {
 
   Widget weatherBlocBuilder(context,state) {
     if(state is WeatherLoading){
-      return Center(child: CircularProgressIndicator());
+      return Container(
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2),
+          child: Center(child: CircularProgressIndicator()));
     }
-    if(state is WeatherLoadSuccess){
-      model = state.model;
+    if(state is WeatherLoaded){
+      model = state.weather;
       return weatherLoadSuccess(model: model);
     }
     else {

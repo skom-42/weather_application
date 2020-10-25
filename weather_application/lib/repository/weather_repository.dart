@@ -1,27 +1,16 @@
-import 'package:flutter/cupertino.dart';
-import 'package:weather_application/repository/current_weather_apiClient.dart';
-import 'package:weather_application/models/current_weather_model.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:weather_application/repository/shered_preferences_repository.dart';
+import 'package:weather_application/api/weather_api_client.dart';
+import 'package:weather_application/models/weather_model.dart';
+import 'package:meta/meta.dart';
 
-const apiKey = '7cbee4239353067306bb4f466f0bee43';
-const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/onecall';
+class WeatherRepository {
 
-class WeatherRepository{
-  final CurrentWeatherApiClient currentWeatherApiClient;
+  final WeatherApiClient weatherApiClient;
+  WeatherRepository({@required this.weatherApiClient}) : assert(weatherApiClient != null);
 
-  WeatherRepository({@required this.currentWeatherApiClient})
-      : assert(currentWeatherApiClient != null);
-
-  Future<CurrentWeatherModel> getLocationWeather() async{
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      var model = await currentWeatherApiClient.getLocationWeather();
-      SPRepository.saveData(model);
-      return model;
-    } else{
-      CurrentWeatherModel model = await SPRepository.loadData();
-      return model.windDeg != null ? model : CurrentWeatherModel('Null','Null','Null','Null','Null','Null',0,0,0);
-    }
+  Future<Weather> getWeather() async {
+    var weather = await weatherApiClient.getWeatherData();
+    var weathers = await weatherApiClient.getForecast();
+    weather.forecast = weathers;
+    return weather;
   }
 }

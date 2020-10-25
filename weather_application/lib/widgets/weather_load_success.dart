@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_application/models/current_weather_model.dart';
+import 'package:weather_application/models/weather_model.dart';
+
+import 'package:weather_application/services/weather.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import '../constants.dart';
@@ -12,7 +14,7 @@ class weatherLoadSuccess extends StatelessWidget {
     @required this.model,
   }) : super(key: key);
 
-  final CurrentWeatherModel model;
+  final Weather model;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class weatherLoadSuccess extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 IconContent(WeatherIcons.strong_wind, '${model.windSpeed} km/h'),
-                IconContent(WeatherIcons.wind_direction,'${CurrentWeatherModel.getWindDirection(model.windDeg)}'),
+                IconContent(WeatherIcons.wind_direction,'${model.windSpeed}'),
               ],
             ),
 
@@ -96,6 +98,6 @@ class weatherLoadSuccess extends StatelessWidget {
   }}
 
 
-  DateTime getDateTime (DateTime dateTime){
+DateTime getDateTime (DateTime dateTime){
   return DateTime(dateTime.year,dateTime.month,dateTime.day);
-  }
+}
