@@ -23,18 +23,9 @@ class WeatherRepository {
       return weather;
     }else {
       Weather weather = await SPRepository.loadData();
-      return weather.windDeg != null ? weather : Weather(
-          location: Null,
-          description: Null,
-          temperature: Null,
-          propability: Null,
-          quantity: Null,
-          pressurer: Null,
-          windSpeed: 0,
-          windDeg: 0,
-          date: 0,
-          main: null,
-      );}
+      return weather;
+
 
   }
+}
 }
