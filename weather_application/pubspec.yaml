@@ -38,6 +38,7 @@ dependencies:
   equatable: ^1.0.0
   shared_preferences: ^0.5.1+2
   connectivity: ^1.0.0
+  grouped_list: ^3.5.0
 
 dev_dependencies:
   flutter_test:

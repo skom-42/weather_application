@@ -1,73 +1,44 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_application/models/weather_model.dart';
 import 'package:weather_icons/weather_icons.dart';
-
-class ListItem extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topLeft,
-            margin: EdgeInsets.only(left: 20),
-            child: Text('Today',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ),
-          Divider(),
-          Item(),
-          Divider(
-            indent: MediaQuery.of(context).size.width /4,),
-          Item(),
-          Divider(indent: MediaQuery.of(context).size.width /4,),
-          Item(),
-          Divider(indent: MediaQuery.of(context).size.width /4,),
-          Item(),
-          Divider(),
-        ],
-      ),
-    );
-  }
-}
+import 'package:intl/intl.dart';
 
 class Item extends StatelessWidget {
 
-  // Item(this.icon, this.time, this.location, this.temperature);
-  // IconData icon;
-  // String time;
-  // String location;
-  // String temperature;
+  final date;
+  final temperature;
+  final description;
+  final main;
+
+  Item({this.date, this.temperature, this.description, this.main});
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(left: 10),
-          padding: EdgeInsets.all(5),
-          child: BoxedIcon(WeatherIcons.day_sunny,
-
-          size: 40,
+          // margin: EdgeInsets.only(left: 10),
+          child: BoxedIcon(Weather.getTitleLogo(main),
+          size: 50,
           color: Colors.amber,
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 15),
+          // margin: EdgeInsets.only(left: 15),
+
           child: Column(
             children: <Widget>[
-              Text('13:00',
+              Text(DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(date * 1000)),
               style: TextStyle(fontSize: 15),
               ),
-              Text('Minsk',style: TextStyle(fontSize: 15),),
+              Text('$description',style: TextStyle(fontSize: 15),),
             ],
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width/2.5),
-          child: Text('20°',
+          child: Text('${Weather.returnInt(temperature)}°',
           style: TextStyle(
             fontSize: 50,
             color: Colors.blue
