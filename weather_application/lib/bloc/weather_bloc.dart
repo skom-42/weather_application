@@ -1,11 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:weather_application/models/weather_model.dart';
 import 'package:meta/meta.dart';
-
 import 'package:weather_application/bloc/weather_event.dart';
 import 'package:weather_application/bloc/weather_state.dart';
 import 'package:weather_application/repository/weather_repository.dart';
-import 'package:weather_application/services/weather.dart';
 
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {

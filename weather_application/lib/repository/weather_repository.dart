@@ -1,9 +1,7 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_application/api/weather_api_client.dart';
 import 'package:weather_application/models/weather_model.dart';
 import 'package:meta/meta.dart';
-import 'dart:convert';
 
 import 'package:weather_application/repository/shered_preferences_repository.dart';
 

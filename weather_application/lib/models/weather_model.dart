@@ -2,54 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import "package:collection/collection.dart";
 
 class Weather {
-  // int id;
-  // int time;
-  // int sunrise;
-  // int sunset;
-  // int humidity;
-  // int temperature;
-  //
-  // String description;
-  // String iconCode;
-  // String main;
-  // String cityName;
-  //
-  // double windSpeed;
 
   final location;
-  final description; //описание погоды //
-  final temperature; //temp; //температура//
-  final propability;  //pop; //вероятность осадков
-  final quantity; //rain; //кол-во осадков     -------------
-  final pressurer; //давление
-  final windSpeed; //скорость ветра
+  final description;
+  final temperature;
+  final propability;
+  final quantity;
+  final pressurer;
+  final windSpeed;
   final windDeg;
   final date;
   final main;
 
-  // Temperature maxTemperature;
-  // Temperature minTemperature;
-
   List<Weather> forecast;
-
-  // Weather(
-  //     {this.id,
-  //       this.time,
-  //       this.sunrise,
-  //       this.sunset,
-  //       this.humidity,
-  //       this.description,
-  //       this.iconCode,
-  //       this.main,
-  //       this.cityName,
-  //       this.windSpeed,
-  //       this.temperature,
-  //       // this.maxTemperature,
-  //       // this.minTemperature,
-  //       this.forecast});
 
   Weather({
     this.location,
@@ -64,26 +31,6 @@ class Weather {
     this.forecast,
     this.main
   });
-
-  // static Weather fromJson(Map<String, dynamic> json) {
-  //   final weather = json['weather'][0];
-  //   //print(weather['description']);
-  //   return Weather(
-  //     id: weather['id'],
-  //     time: json['dt'],
-  //     description: weather['description'],
-  //     iconCode: weather['icon'],
-  //     main: weather['main'],
-  //     cityName: json['name'],
-  //     temperature: json['main']['temp'],
-  //     // maxTemperature: Temperature(intToDouble(json['main']['temp_max'])),
-  //     // minTemperature: Temperature(intToDouble(json['main']['temp_min'])),
-  //     sunrise: json['sys']['sunrise'],
-  //     sunset: json['sys']['sunset'],
-  //     humidity: json['main']['humidity'],
-  //     windSpeed: json['wind']['speed'],
-  //   );
-  // }
 
   static Weather fromJson(Map<String, dynamic> json){
     DateTime now = new DateTime.now();
@@ -123,9 +70,6 @@ class Weather {
     print(result[0].temperature);
     return result;
   }
-      // (json.decode(weather) as List<dynamic>)
-      //     .map<Weather>((item) => Weather.fromForecastJson(item))
-      //     .toList();
 
   static List<Weather> fromForecastJson(Map<String, dynamic> json) {
     final weathers = List<Weather>();

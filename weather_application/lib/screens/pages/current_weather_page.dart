@@ -3,7 +3,6 @@ import 'package:weather_application/models/weather_model.dart';
 import 'package:weather_application/widgets/dotted_line.dart';
 import 'package:weather_application/widgets/icon_content.dart';
 import 'package:weather_icons/weather_icons.dart';
-
 import '../../constants.dart';
 
 class CurrentWeatherPage extends StatelessWidget {
@@ -30,13 +29,6 @@ class CurrentWeatherPage extends StatelessWidget {
                 color: Colors.amber,
                 size: MediaQuery.of(context).size.width/3,
               ),
-              // Container(
-              //   margin: EdgeInsets.only(top: 20, bottom: 40),
-              //   child: Icon(WeatherIcons.day_sunny,
-              //   size: MediaQuery.of(context).size.width/3,
-              //   color: Colors.amber,
-              //   ),
-              // ),
 
               Text('${Weather.getCurrentLocation(model.location)}',
                 style: kLocationText,

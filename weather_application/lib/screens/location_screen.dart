@@ -8,7 +8,6 @@ import 'package:weather_application/screens/pages/current_weather_page.dart';
 import 'package:weather_application/screens/pages/forecast_weather_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class LocationScreen extends StatefulWidget {
 
   LocationScreen({this.repo});
@@ -22,7 +21,6 @@ class _LocationScreenState extends State<LocationScreen> {
   WeatherRepository repo;
   Weather model;
   _LocationScreenState({this.repo});
-
 
   int _currentIndex = 0;
   Widget callPage(int currentIndex){
